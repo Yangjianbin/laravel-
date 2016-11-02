@@ -79,7 +79,7 @@
                 bkToptips.show().children('span').html(d.msg);
                 setTimeout(function(){
                     bkToptips.hide();
-                    location.href = '/laravel/public/category';
+                    location.href = '{{$return_url}}';
                 },2000);
             }).fail(function () {
                 bkToptips.show().children('span').html('登录失败，稍后再试');

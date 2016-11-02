@@ -74,12 +74,9 @@ class MemberController extends Controller
                 return $m3_result->toJson();
             }
         }
-
         $req->session()->put('member',$member);
-
         $m3_result->code = 0;
         $m3_result->msg = '登录成功';
-        $req->session()->put('member','');
         return $m3_result->toJson();
 
 

@@ -3,7 +3,7 @@
 
 @section('content')
     <link rel="stylesheet" href="/laravel/public/css/swipe.css">
-    <div class="page">
+    <div class="page" style="top:0">
     <div class="addWrap">
         <div class="swipe" id="mySwipe">
             <div class="swipe-wrap">
@@ -30,7 +30,7 @@
     <div class="weui_cells_title">详细介绍</div>
     <div class="weui_cells">
         <div class="weui_cell" style="display:block;">
-            {!! $pdt_content->content !!}
+            {!! $pdt_content ? $pdt_content->content : '' !!}
         </div>
     </div>
     <div class="bk_fix_bottom">
@@ -40,8 +40,8 @@
             </button>
         </div>
         <div class="bk_half_area">
-            <button class="weui_btn weui_btn_default">
-                结算! <span id="cart_num" class="m3_price"></span>
+            <button onclick="toCart();" class="weui_btn weui_btn_default">
+                结算(<span id="cart_num" class="m3_price">{{$count}}</span>)
             </button>
         </div>
     </div>
@@ -64,6 +64,31 @@
                 bullets[pos].className = 'cur';
             }
         });
-    </script>
+        var cart_num = $('#cart_num');
+        function addCart() {
+            var product_id = '{{$product->id}}';
+            $.ajax({
+                url:'/laravel/public/service/cart/add/' + product_id,
+                cache:false,
+                dataType:'json'
+            }).done(function (d) {
+                if(d == null || d.code != 0){
+                    bkToptips.show().children('span').html('操作失败，稍后再试');
+                    setTimeout(function(){bkToptips.hide()},1500);
+                    return ;
+                }
+                var num = cart_num.text();
+                cart_num.text(!num ? 1 : parseInt(num) + 1);
+            }).fail(function () {
+                bkToptips.show().children('span').html('操作失败，稍后再试');
+                setTimeout(function(){bkToptips.hide()},1500);
+            })
+        }
+        
+        function toCart() {
+            location.href = '/laravel/public/cart';
+        }
+        
 
+    </script>
 @endsection
